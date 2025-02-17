@@ -13,26 +13,24 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ReportesGUI extends JFrame {
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
-    static void eliminarUsuario(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    private Usuario usuarioActual;
-    private static List<Jugador> rankingJugadores = new ArrayList<>();
-    private static List<String> logsJuegos = new ArrayList<>();
+public class ReportesGUI extends JFrame {
+    private Usuario usuario;
 
     public ReportesGUI(Usuario usuario) {
-        this.usuarioActual = usuario;
-
+        this.usuario = usuario;
         setTitle("Reportes");
-        setSize(400, 400);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(400, 300);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new GridLayout(3, 1));
 
-        JButton btnRanking = new JButton("Ver Ranking de Jugadores");
-        JButton btnLogs = new JButton("Ver Mis Últimos Partidos");
+        JButton btnRanking = new JButton("Ranking de Jugadores");
+        JButton btnLogs = new JButton("Logs de mis últimos juegos");
         JButton btnCerrar = new JButton("Cerrar");
 
         btnRanking.addActionListener(e -> mostrarRanking());
@@ -44,62 +42,33 @@ public class ReportesGUI extends JFrame {
         add(btnCerrar);
     }
 
-    // Método para mostrar el ranking de jugadores
     private void mostrarRanking() {
-        rankingJugadores.sort(Comparator.comparingInt(Jugador::getPuntos).reversed());
+        List<Usuario> ranking = LoginRecursivoGUI.listaUsuarios.stream()
+                .sorted((u1, u2) -> Integer.compare(u2.getPuntos(), u1.getPuntos()))
+                .collect(Collectors.toList());
 
-        StringBuilder rankingTexto = new StringBuilder("POSICIÓN - USERNAME - PUNTOS\n");
-        for (int i = 0; i < rankingJugadores.size(); i++) {
-            Jugador jugador = rankingJugadores.get(i);
-            rankingTexto.append((i + 1)).append(". ").append(jugador.getNombre())
-                    .append(" - ").append(jugador.getPuntos()).append(" pts\n");
+        StringBuilder mensaje = new StringBuilder("Ranking de Jugadores:\n");
+        int posicion = 1;
+        for (Usuario u : ranking) {
+            mensaje.append(posicion++).append(". ").append(u.getNombre()).append(" - ").append(u.getPuntos()).append(" puntos\n");
         }
 
-        JOptionPane.showMessageDialog(this, rankingTexto.toString(), "Ranking de Jugadores", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, mensaje.toString(), "Ranking", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Método para mostrar los logs de los últimos juegos del usuario logueado
     private void mostrarLogs() {
-        List<String> logsUsuario = new ArrayList<>();
-        for (String log : logsJuegos) {
-            if (log.contains(usuarioActual.getNombre())) {
-                logsUsuario.add(log);
-            }
+        List<String> logs = usuario.getLogs();
+
+        if (logs.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay logs disponibles.", "Logs", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
-        Collections.reverse(logsUsuario); // Ordenar del más reciente al más antiguo
-
-        StringBuilder logsTexto = new StringBuilder("Mis Últimos Partidos:\n");
-        for (String log : logsUsuario) {
-            logsTexto.append(log).append("\n");
+        StringBuilder mensaje = new StringBuilder("Logs de tus últimos juegos:\n");
+        for (String log : logs) {
+            mensaje.append(log).append("\n");
         }
 
-        JOptionPane.showMessageDialog(this, logsTexto.toString(), "Logs de Últimos Juegos", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    // Métodos para actualizar el ranking y logs
-    public static void agregarJugadorAlRanking(Jugador jugador) {
-        rankingJugadores.add(jugador);
-    }
-
-    public static void actualizarPuntaje(String nombreJugador, int puntos) {
-        for (Jugador jugador : rankingJugadores) {
-            if (jugador.getNombre().equals(nombreJugador)) {
-                jugador.setPuntos(jugador.getPuntos() + puntos);
-                return;
-            }
-        }
-    }
-
-    public static void agregarLog(String log) {
-        logsJuegos.add(log);
-    }
-
-    public static void eliminarJugadorDelRanking(String nombre) {
-        rankingJugadores.removeIf(jugador -> jugador.getNombre().equals(nombre));
-    }
-
-    public static void eliminarLogsDeUsuario(String nombre) {
-        logsJuegos.removeIf(log -> log.contains(nombre));
+        JOptionPane.showMessageDialog(this, mensaje.toString(), "Logs", JOptionPane.INFORMATION_MESSAGE);
     }
 }

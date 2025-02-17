@@ -49,7 +49,7 @@ public class LoginRecursivoGUI extends JFrame {
         btnLogin.addActionListener(e -> loginRecursivo());
         btnRegistro.addActionListener(e -> new RegistroUsuarioGUI(listaUsuarios).setVisible(true));
         btnSalir.addActionListener(e -> System.exit(0));
-}
+    }
 
     private void loginRecursivo() {
         String nombre = txtNombre.getText().trim();
@@ -63,8 +63,10 @@ public class LoginRecursivoGUI extends JFrame {
         for (Usuario u : listaUsuarios) {
             if (u.getNombre().equals(nombre) && u.getPassword().equals(password)) {
                 JOptionPane.showMessageDialog(this, "Bienvenido, " + nombre);
-                new Main(u).setVisible(true);
+                
+                // Cierra la ventana del login antes de abrir el menú principal
                 this.dispose();
+                new Main(u).setVisible(true);
                 return;
             }
         }
@@ -78,3 +80,5 @@ public class LoginRecursivoGUI extends JFrame {
         }
     }
 }
+
+

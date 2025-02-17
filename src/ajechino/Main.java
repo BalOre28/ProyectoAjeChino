@@ -3,17 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ajechino;
-
+import javax.swing.*;
+import java.util.List;
 /**
  *
  * @author Balto
  */
-import javax.swing.*;
-
-import javax.swing.*;
-
 public class Main extends JFrame {
-
     private Usuario usuario;
 
     public Main(Usuario usuario) {
@@ -24,35 +20,33 @@ public class Main extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        JButton btnJugar = new JButton("Jugar Xiangqi");
+        JButton btnNuevaPartida = new JButton("Nueva Partida");
         JButton btnMiCuenta = new JButton("Mi Cuenta");
         JButton btnReportes = new JButton("Reportes");
         JButton btnLogout = new JButton("Log Out");
 
-        btnJugar.addActionListener(e -> iniciarPartida());
+        btnNuevaPartida.addActionListener(e -> {
+            new SeleccionarOponenteGUI(this, usuario, LoginRecursivoGUI.listaUsuarios).setVisible(true);
+        });
+
         btnMiCuenta.addActionListener(e -> new MiCuentaGUI(usuario).setVisible(true));
         btnReportes.addActionListener(e -> new ReportesGUI(usuario).setVisible(true));
-        btnLogout.addActionListener(e -> cerrarSesion());
+        btnLogout.addActionListener(e -> {
+            dispose(); // Cierra el menú principal antes de regresar al login
+            new LoginRecursivoGUI().setVisible(true);
+        });
 
-        add(btnJugar);
+        add(btnNuevaPartida);
         add(btnMiCuenta);
         add(btnReportes);
         add(btnLogout);
-    }
-
-    private void iniciarPartida() {
-        JOptionPane.showMessageDialog(this, "Iniciando partida de Xiangqi...");
-        javax.swing.SwingUtilities.invokeLater(() -> new XiangqiGUI());
-    }
-
-    private void cerrarSesion() {
-        JOptionPane.showMessageDialog(this, "Cerrando sesión...");
-        this.dispose();
-        new LoginRecursivoGUI().setVisible(true);
+        
+          JLabel puntosLabel = new JLabel("Puntos: " + usuario.getPuntos());
+        add(puntosLabel);
     }
 
     public static void main(String[] args) {
-        // Iniciar la aplicación mostrando la pantalla de login
         SwingUtilities.invokeLater(() -> new LoginRecursivoGUI().setVisible(true));
     }
 }
+

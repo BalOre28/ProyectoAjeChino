@@ -9,7 +9,7 @@ package ajechino;
  * @author Balto
  */
 class Jugador {
-    private String nombre;
+    private final String nombre;
     private int puntos;
 
     public Jugador(String nombre, int puntos) {

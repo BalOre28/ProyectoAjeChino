@@ -73,22 +73,20 @@ public class MiCuentaGUI extends JFrame {
     // Eliminar usuario de la lista global
     if (LoginRecursivoGUI.listaUsuarios.remove(usuario)) {
         JOptionPane.showMessageDialog(this, "Cuenta eliminada correctamente.");
+        
+        dispose(); // Cierra MiCuentaGUI
 
-        // Cerrar todas las ventanas abiertas
-        Window[] windows = Window.getWindows();
-        for (Window window : windows) {
-            if (window instanceof JFrame) {
-                window.dispose(); // Cierra todas las ventanas JFrame
-            }
+        // Cerrar todo y abrir el login nuevamente
+        JFrame menuPrincipal = (JFrame) SwingUtilities.getWindowAncestor(this);
+        if (menuPrincipal != null) {
+            menuPrincipal.dispose(); // Cierra el menú principal
         }
 
-        // Volver al login
-        new LoginRecursivoGUI().setVisible(true);
+        new LoginRecursivoGUI().setVisible(true); // Regresar al login
     } else {
         JOptionPane.showMessageDialog(this, "Error al eliminar la cuenta.", "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
-
 
 }
 

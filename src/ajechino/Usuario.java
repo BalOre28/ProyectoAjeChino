@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ajechino;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -12,11 +14,13 @@ public class Usuario {
     private String nombre;
     private String password;
     private int puntos;
+    private List<String> logs;
 
-    public Usuario(String nombre, String password, int puntos) {
+    public Usuario(String nombre, String password) {
         this.nombre = nombre;
         this.password = password;
-        this.puntos = puntos;
+        this.puntos = 0;
+        this.logs = new ArrayList<>();
     }
 
     public String getNombre() {
@@ -27,16 +31,24 @@ public class Usuario {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getPuntos() {
         return puntos;
     }
 
-    public void sumarPuntos(int puntos) {
-        this.puntos += puntos;
+    public void setPassword(String nuevaPassword) {
+        this.password = nuevaPassword;
+    }
+
+    public void incrementarPuntos(int puntosGanados) {
+        this.puntos += puntosGanados;
+    }
+
+    public void agregarLog(String log) {
+        logs.add(0, log); // Agregar en la primera posición para mantener orden reciente
+    }
+
+    public List<String> getLogs() {
+        return logs;
     }
 }
 

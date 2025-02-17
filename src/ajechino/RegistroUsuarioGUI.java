@@ -64,7 +64,7 @@ public class RegistroUsuarioGUI extends JFrame {
             }
         }
 
-        listaUsuarios.add(new Usuario(nombre, password,0));
+        listaUsuarios.add(new Usuario(nombre, password));
         JOptionPane.showMessageDialog(this, "Usuario registrado exitosamente.");
         dispose();
     }
